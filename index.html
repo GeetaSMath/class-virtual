@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class Virtual Tuition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<style>
+  :root {
+    --paper: #f7f8f4;
+    --sheet: #ffffff;
+    --ink: #1d2b4f;
+    --muted: #55607a;
+    --rule: #d7e2f2;
+    --margin: #c8423b;
+    --hi: #f6d94a;
+    --hi-ink: #1d2b4f;
+    --field: #ffffff;
+    --field-line: #b9c6dc;
+    --btn: #1d2b4f;
+    --btn-ink: #ffffff;
+    --ok: #1f7a4d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #121826;
+      --sheet: #1a2233;
+      --ink: #e8edf7;
+      --muted: #a4afc6;
+      --rule: #2a3550;
+      --margin: #e0675f;
+      --hi: #e8c93a;
+      --hi-ink: #121826;
+      --field: #121826;
+      --field-line: #3a4866;
+      --btn: #e8c93a;
+      --btn-ink: #121826;
+      --ok: #5fcf95;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #121826;
+    --sheet: #1a2233;
+    --ink: #e8edf7;
+    --muted: #a4afc6;
+    --rule: #2a3550;
+    --margin: #e0675f;
+    --hi: #e8c93a;
+    --hi-ink: #121826;
+    --field: #121826;
+    --field-line: #3a4866;
+    --btn: #e8c93a;
+    --btn-ink: #121826;
+    --ok: #5fcf95;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 32px 16px 48px;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; display: grid; gap: 28px; }
+
+  h1, h2 { font-family: "Baloo 2", "Segoe UI", system-ui, sans-serif; text-wrap: balance; line-height: 1.15; margin: 0; }
+  h1 { font-size: clamp(2.4rem, 7vw, 3.4rem); font-weight: 800; letter-spacing: -0.5px; }
+  h2 { font-size: 1.5rem; font-weight: 800; }
+  p { margin: 0; }
+
+  .masthead { display: grid; gap: 10px; }
+  .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--margin);
+  }
+  .mark { background: linear-gradient(transparent 55%, var(--hi) 55%); color: inherit; padding: 0 2px; }
+  :root[data-theme="dark"] .mark { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--hi) 45%, transparent) 55%); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .mark { background: linear-gradient(transparent 55%, color-mix(in srgb, var(--hi) 45%, transparent) 55%); }
+  }
+  .lede { color: var(--muted); font-size: 1.05rem; max-width: 56ch; }
+
+  /* notebook sheet */
+  .sheet {
+    background-color: var(--sheet);
+    background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px);
+    border-radius: 6px;
+    box-shadow: 0 1px 0 var(--rule), 0 8px 24px rgba(29, 43, 79, 0.08);
+    padding: 24px 20px 24px 44px;
+    position: relative;
+    display: grid;
+    gap: 18px;
+  }
+  .sheet::before {
+    content: ""; position: absolute; top: 0; bottom: 0; left: 28px; width: 2px; background: var(--margin); opacity: 0.7;
+  }
+
+  .facts { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .facts li { display: grid; grid-template-columns: 7.5rem 1fr; gap: 12px; align-items: baseline; }
+  .facts b { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  @media (max-width: 440px) { .facts li { grid-template-columns: 1fr; gap: 0; } }
+
+  .fees { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .fee {
+    background: var(--sheet); border: 1.5px solid var(--field-line); border-radius: 8px; padding: 16px;
+    display: grid; gap: 4px;
+  }
+  .fee .who { font-weight: 700; }
+  .fee .amt { font-family: "Baloo 2", "Segoe UI", sans-serif; font-size: 1.8rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .fee .amt small { font-family: "Nunito Sans", sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--muted); }
+  .fee s { color: var(--muted); font-size: 0.9rem; }
+  .fee-note { font-size: 13px; color: var(--muted); }
+
+  form { display: grid; gap: 16px; }
+  label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  input, select {
+    width: 100%; box-sizing: border-box; padding: 12px; font: inherit; font-size: 15px;
+    background: var(--field); color: var(--ink); border: 1.5px solid var(--field-line); border-radius: 8px;
+  }
+  input:focus-visible, select:focus-visible, .btn:focus-visible, .copy:focus-visible {
+    outline: 3px solid var(--hi); outline-offset: 2px; border-color: var(--ink);
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+
+  .btn {
+    display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+    background: var(--btn); color: var(--btn-ink); border: 0; border-radius: 8px;
+    padding: 14px 18px; font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; text-decoration: none;
+  }
+  .btn:hover { filter: brightness(1.1); }
+  .result { display: grid; gap: 10px; padding: 16px; border: 1.5px dashed var(--ok); border-radius: 8px; }
+  .result p { color: var(--ok); font-weight: 700; }
+  .hint { font-size: 13px; color: var(--muted); }
+
+  .contact { display: grid; gap: 10px; }
+  .contact-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .contact-line span { font-weight: 700; font-variant-numeric: tabular-nums; user-select: all; }
+  .copy {
+    font: inherit; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; cursor: pointer;
+    background: transparent; color: var(--ink); border: 1.5px solid var(--field-line);
+  }
+  footer { text-align: center; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <span class="eyebrow">Online tuition · Classes 1 to 9</span>
+    <h1>Class Virtual</h1>
+    <p class="lede">Daily online tuition in batches of <span class="mark">only 5 students</span>, so every child gets the teacher's attention.</p>
+  </header>
+
+  <section class="sheet" aria-labelledby="why">
+    <h2 id="why">How classes run</h2>
+    <ul class="facts">
+      <li><b>Batch size</b><span>Maximum 5 students per batch</span></li>
+      <li><b>Duration</b><span>1.5 hours of coaching every day</span></li>
+      <li><b>Timing</b><span>Evening slot of your choice between 7:00 PM and 9:00 PM</span></li>
+      <li><b>Classes</b><span>Standard 1st to 9th, all regular school subjects</span></li>
+    </ul>
+  </section>
+
+  <section class="sheet" aria-labelledby="fees">
+    <h2 id="fees">Monthly fees</h2>
+    <div class="fees">
+      <div class="fee">
+        <span class="who">Classes 1st to 5th</span>
+        <span class="amt">₹1,500 <small>/ month</small></span>
+        <s>₹2,000</s>
+      </div>
+      <div class="fee">
+        <span class="who">Classes 6th to 9th</span>
+        <span class="amt">₹2,000 <small>/ month</small></span>
+        <s>₹2,500</s>
+      </div>
+    </div>
+    <p class="fee-note">Special introductory fee for the upcoming batch.</p>
+  </section>
+
+  <section class="sheet" aria-labelledby="join">
+    <h2 id="join">Reserve a seat</h2>
+    <p class="hint">Fill in the details and send them to us on WhatsApp. We will confirm your batch.</p>
+    <form id="joinForm" novalidate>
+      <div>
+        <label for="studentName">Student full name</label>
+        <input type="text" id="studentName" required placeholder="e.g. Aarav Kulkarni">
+      </div>
+      <div class="row">
+        <div>
+          <label for="studentClass">Class / standard</label>
+          <select id="studentClass" required>
+            <option value="">Choose class</option>
+            <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+            <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+            <option>Class 7</option><option>Class 8</option><option>Class 9</option>
+          </select>
+        </div>
+        <div>
+          <label for="timing">Preferred timing</label>
+          <select id="timing" required>
+            <option value="">Choose timing</option>
+            <option>7:00 PM to 8:30 PM</option>
+            <option>7:30 PM to 9:00 PM</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label for="contact">Parent WhatsApp / phone number</label>
+        <input type="tel" id="contact" required inputmode="numeric" maxlength="10" placeholder="10-digit mobile number">
+      </div>
+      <p class="hint" id="formError" hidden style="color: var(--margin); font-weight: 700;"></p>
+      <button type="submit" class="btn">Prepare application</button>
+    </form>
+    <div class="result" id="result" hidden>
+      <p>Application ready. Tap below to send it on WhatsApp.</p>
+      <a class="btn" id="waLink" href="https://wa.me/919108661607" target="_blank" rel="noopener">Send on WhatsApp</a>
+      <span class="hint">If WhatsApp doesn't open, call or message us on the numbers below.</span>
+    </div>
+  </section>
+
+  <section class="sheet contact" aria-labelledby="help">
+    <h2 id="help">Contact us</h2>
+    <div class="contact-line">Phone <span>9108661607</span><button class="copy" data-copy="9108661607" type="button">Copy</button></div>
+    <div class="contact-line">Phone <span>9448443615</span><button class="copy" data-copy="9448443615" type="button">Copy</button></div>
+    <div class="contact-line">Email <span>geetasmath@gmail.com</span><button class="copy" data-copy="geetasmath@gmail.com" type="button">Copy</button></div>
+  </section>
+
+  <footer>Class Virtual · Online tuition for Classes 1 to 9</footer>
+</div>
+
+<script>
+  const form = document.getElementById('joinForm');
+  const err = document.getElementById('formError');
+  const result = document.getElementById('result');
+  const waLink = document.getElementById('waLink');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('studentName').value.trim();
+    const cls = document.getElementById('studentClass').value;
+    const timing = document.getElementById('timing').value;
+    const phone = document.getElementById('contact').value.trim();
+
+    let msg = '';
+    if (!name) msg = 'Enter the student name.';
+    else if (!cls) msg = 'Choose a class.';
+    else if (!timing) msg = 'Choose a timing.';
+    else if (!/^\d{10}$/.test(phone)) msg = 'Enter a 10-digit mobile number.';
+    if (msg) { err.textContent = msg; err.hidden = false; result.hidden = true; return; }
+    err.hidden = true;
+
+    const text = `Hello Class Virtual, I want to reserve a seat.\nStudent: ${name}\nClass: ${cls}\nTiming: ${timing}\nParent phone: ${phone}`;
+    waLink.href = 'https://wa.me/919108661607?text=' + encodeURIComponent(text);
+    result.hidden = false;
+    waLink.focus();
+  });
+
+  document.querySelectorAll('.copy').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const done = () => { btn.textContent = 'Copied'; setTimeout(() => (btn.textContent = 'Copy'), 1500); };
+      navigator.clipboard.writeText(btn.dataset.copy).then(done).catch(() => {
+        const r = document.createRange();
+        r.selectNodeContents(btn.previousElementSibling);
+        const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      });
+    });
+  });
+</script>
+</body>
+</html>
